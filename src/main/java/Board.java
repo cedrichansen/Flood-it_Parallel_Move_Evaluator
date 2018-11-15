@@ -2,29 +2,49 @@ import java.util.Random;
 
 public class Board {
 
+    private Space[][] spaces;
+    private int numStepsTaken;
+    private int numColours;
 
-    public Space[][] spaces;
-    public int numStepsTaken;
-
-    public Board(Space[][] spaces, int steps) {
+    //generateInitial board
+    public Board(Space[][] spaces, int steps, int numColours) {
 
         this.spaces = spaces;
         numStepsTaken = steps;
     }
 
+    public Board(Board b) {
 
-    public static Space[][] generateRandomBoard(int row, int col, int numColours) {
+        //TODO call a function that appropriatly modifies the spaces
+        this.spaces = b.spaces;
+        this.numStepsTaken = b.numStepsTaken++;
+        this.numColours = b.numColours;
+    }
+
+
+
+
+    public void changeEncapsulatedColour(){
+
+    }
+
+
+
+
+    public static Board generateRandomBoard(int row, int col, int numColours) {
         Random r = new Random();
-        Space[][] firstBoard = new Space[row][col];
+        Space[][] firstSpaces = new Space[row][col];
+
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
 
-                firstBoard[i][j] = new Space(r.nextInt(numColours), false);
+                firstSpaces[i][j] = new Space(r.nextInt(numColours), false);
 
             }
         }
-        firstBoard[0][0].setEncapsulated(true);   // Space at [0][0] is by default the starting point, so it must be encapsulated
+        firstSpaces[0][0].setEncapsulated(true);   // Space at [0][0] is by default the starting point, so it must be encapsulated
 
+        Board firstBoard = new Board(firstSpaces, 0, numColours);
         return firstBoard;
     }
 
@@ -40,5 +60,35 @@ public class Board {
             System.out.println(row);
         }
     }
+
+
+
+
+
+
+    public Space[][] getSpaces() {
+        return spaces;
+    }
+
+    public void setSpaces(Space[][] spaces) {
+        this.spaces = spaces;
+    }
+
+    public int getNumStepsTaken() {
+        return numStepsTaken;
+    }
+
+    public void setNumStepsTaken(int numStepsTaken) {
+        this.numStepsTaken = numStepsTaken;
+    }
+
+    public int getNumColours() {
+        return numColours;
+    }
+
+    public void setNumColours(int numColours) {
+        this.numColours = numColours;
+    }
+
 
 }

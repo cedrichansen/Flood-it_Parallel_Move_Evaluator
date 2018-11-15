@@ -2,8 +2,8 @@ public class Main {
 
     public static void main(String [] args) {
 
-        Board b = new Board(Board.generateRandomBoard(10,10,6), 0);
+        Board b = Board.generateRandomBoard(10,10, 6);
         b.printBoard();
-        
+
     }
 }
