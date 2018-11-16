@@ -8,5 +8,19 @@
     <artifactId>csc375hw03</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    
+    <dependencies>
+
+        <!-- https://mvnrepository.com/artifact/org.controlsfx/controlsfx -->
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.40.14</version>
+        </dependency>
+
+
+    </dependencies>
+
+
+
+
 </project>
