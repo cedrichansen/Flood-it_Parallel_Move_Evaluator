@@ -6,9 +6,12 @@ public class Board {
 
     //no need to keep track of which state the current colour of encapsulated section, because it will always be the
     //colour of spaces[0][0]
-    private         Space[][]       spaces;
-    private         int             numStepsTaken;
-    private         int             numColours;
+    private         Space[][]           spaces;
+    private         int                 numStepsTaken;
+    private         int                 numColours;
+    private         ArrayList<Space>    encapsulatedSpaces;
+    private         int                 numEncapsulatedSpaces;
+    private         boolean             doneFlooding = false;
 
 
 
@@ -23,99 +26,55 @@ public class Board {
     public Board(Board b, int newColour) {
 
         //TODO call a function that appropriatly modifies the spaces
-        this.spaces = changeColour(newColour);
+        this.spaces = b.spaces;
         this.numStepsTaken = b.numStepsTaken++;
         this.numColours = b.numColours;
     }
 
 
 
-    public Space[][] changeColour(int newColour){
-        changeEncapsulatedColour(newColour);
-        changeSurroundingColours(newColour);
-       return spaces;
-
-    }
 
 
-    public void changeSurroundingColours(int newColour){
-        ArrayList<Space> spaces = getSpacesToBeChanged();
-        for (Space s : spaces) {
-            s.setColour(newColour);
-            s.setEncapsulated(true);
+    public void assignNewEncapsulating(int newColour, Board b) {
+        encapsulatedSpaces = getEncapsulatedSpaces();
+
+        for (Space s : encapsulatedSpaces) {
+           addSameColourNeighbours(s.getI(), s.getJ(), b);
         }
     }
 
 
-    public ArrayList<Space> getSpacesToBeChanged() {
-        ArrayList<Space> surroundingSpaces = new ArrayList<Space>();
-
-        int encapsulatedColour = spaces[0][0].getColour();
-
-        for (int i = 0; i<spaces.length;i++) {
-            for (int j=0; j<spaces[0].length; j++) {
-
-                //look at at neighbours and only add it to list to be changed if the neighbour is encapsulated, and
-                // is the same colour
-                ArrayList<Space> neighbours = getSpaceNeighbours(i,j);
-                for (Space s :neighbours) {
-                    if (s.isEncapsulated() && (s.getColour()==encapsulatedColour)) {
-                        surroundingSpaces.add(s);
-                        s.setEncapsulated(true);
-                        break;
-                    }
-                }
+    public void addSameColourNeighbours(int i, int j, Board b) {
+        Space current = b.spaces[i][j];
+        if (isValidSpace(i-1, j, b)) {
+            if (b.spaces[i-1][j].getColour() == current.getColour()) {
+                b.spaces[i-1][j].setEncapsulated(true);
             }
         }
-
-        return surroundingSpaces;
-
+        if (isValidSpace(i+1, j, b)) {
+            if (b.spaces[i+1][j].getColour() == current.getColour()) {
+                b.spaces[i+1][j].setEncapsulated(true);
+            }
+        }
+        if (isValidSpace(i, j-1, b)) {
+            if (b.spaces[i][j-1].getColour() == current.getColour()) {
+                b.spaces[i][j-1].setEncapsulated(true);
+            }
+        }
+        if (isValidSpace(i, j+1, b)) {
+            if (b.spaces[i][j+1].getColour() == current.getColour()) {
+                b.spaces[i][j+1].setEncapsulated(true);
+            }
+        }
     }
 
 
-        //helper for getSpaces to be changed
-    public boolean isValidIndex(int i, int j) {
-        return (i<spaces.length && 0<=i) && (j<spaces[0].length && j<spaces[0].length);
+    public static boolean isValidSpace(int i, int j, Board b) {
+
+        return ((i>=0 && i<b.spaces.length) && (j>=0 && j<b.spaces[0].length));
+
+
     }
-
-
-    public ArrayList<Space> getSpaceNeighbours(int i, int j){
-
-        ArrayList<Space> neighbours = new ArrayList<Space>();
-
-        if (isValidIndex(i, j-1)) {
-            neighbours.add(spaces[i][j-1]);
-        }
-        if (isValidIndex(i, j+1)) {
-            neighbours.add(spaces[i][j+1]);
-        }
-        //--------------------------------//
-        if (isValidIndex(i-1, j-1)) {
-            neighbours.add(spaces[i-1][j-1]);
-
-        }
-        if (isValidIndex(i-1, j)) {
-            neighbours.add(spaces[i-1][j]);
-
-        }
-        if (isValidIndex(i-1, j+1)) {
-            neighbours.add(spaces[i-1][j+1]);
-
-        }
-        //--------------------------------//
-        if (isValidIndex(i+1, j-1)) {
-            neighbours.add(spaces[i+1][j-1]);
-        }
-        if (isValidIndex(i+1, j)) {
-            neighbours.add(spaces[i+1][j]);
-        }
-        if (isValidIndex(i+1, j+1)) {
-            neighbours.add(spaces[i+1][j+1]);
-        }
-
-        return neighbours;
-    }
-
 
     public void changeEncapsulatedColour(int newColour){
         ArrayList<Space> spaces = getEncapsulatedSpaces();
@@ -128,6 +87,8 @@ public class Board {
     //helper for changeEncapsulateColour
     public ArrayList<Space> getEncapsulatedSpaces(){
         ArrayList<Space> encapsulatedSpaces = new ArrayList<Space>();
+        numEncapsulatedSpaces = encapsulatedSpaces.size();
+
 
         for (int i=0; i<spaces.length; i++) {
             for (int j = 0; j<spaces[0].length; j++) {
@@ -136,6 +97,10 @@ public class Board {
                     encapsulatedSpaces.add(spaces[i][j]);
                 }
             }
+        }
+
+        if (encapsulatedSpaces.size()== spaces.length * spaces[0].length) {
+            doneFlooding = true;
         }
         return encapsulatedSpaces;
     }
@@ -150,7 +115,7 @@ public class Board {
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
 
-                firstSpaces[i][j] = new Space(r.nextInt(numColours), false);
+                firstSpaces[i][j] = new Space(r.nextInt(numColours), false, i, j);
 
             }
         }
@@ -167,7 +132,7 @@ public class Board {
         for (int i = 0; i < length; i++) {
             String row = "";
             for (int j = 0; j < width; j++) {
-                row += spaces[i][j] + " ";
+                row += spaces[i][j].toString() + " ";
             }
             System.out.println(row);
         }
@@ -201,6 +166,18 @@ public class Board {
     public void setNumColours(int numColours) {
         this.numColours = numColours;
     }
+
+
+    public int getNumEncapsulatedSpaces() {
+        return numEncapsulatedSpaces;
+    }
+
+
+    public boolean isDoneFlooding() {
+        return doneFlooding;
+    }
+
+
 
 
 }
