@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -143,14 +144,18 @@ public class Main extends Application {
         grid.setHorizontalCellSpacing(0);
         grid.setVerticalCellSpacing(0);
 
-
         StackPane root = new StackPane();
+        root.setAlignment(Pos.CENTER);
+        StackPane.setMargin(grid, new Insets(8,8,8,8));
         root.getChildren().add(grid);
 
-        Scene scene = new Scene(root, 500, 575);
+
+        Scene scene = new Scene(root, 485, 575);
+
 
         primaryStage.setTitle("Flood It - Solver");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 }
