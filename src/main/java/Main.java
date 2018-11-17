@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -22,23 +23,71 @@ import org.controlsfx.control.cell.ColorGridCell;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class Main extends Application {
 
 
     static Board b;
+    static Pane root;
+    static GridView<Color> grid;
+    static ObservableList<Color> colours;
+    static Button redButton;
+    static Button yellowButton;
+    static Button blueButton;
+    Scanner kb = new Scanner(System.in);
+
 
     public static void main(String[] args) {
 
         b = Board.generateRandomBoard(10, 10, 6);
         b.printBoard();
 
+        //playGame();
+
+
         launch(args);
 
 
     }
 
-    public void playGame(){
+
+    public void changeColour(int newColour) {
+        b.changeEncapsulatedColour(newColour);
+        b.assignNewEncapsulating(newColour, b);
+
+        int numEncapsulated = 1;
+        int prevNumEncapsulated = 0;
+
+        while (numEncapsulated != prevNumEncapsulated) {
+
+
+            b.assignNewEncapsulating(newColour, b);
+            prevNumEncapsulated = b.getNumEncapsulatedSpaces();
+
+            b.changeEncapsulatedColour(newColour);
+
+            b.assignNewEncapsulating(newColour, b);
+
+            numEncapsulated = b.getNumEncapsulatedSpaces();
+
+            b.changeEncapsulatedColour(newColour);
+
+            b.assignNewEncapsulating(newColour, b);
+
+            b.changeEncapsulatedColour(newColour);
+
+            b.assignNewEncapsulating(newColour, b);
+
+            b.changeEncapsulatedColour(newColour);
+
+            b.assignNewEncapsulating(newColour, b);
+
+
+        }
+    }
+
+    public static void playGame(){
 
         //System.out.println("\nEnter new colour");
         Scanner kb = new Scanner(System.in);
@@ -81,19 +130,65 @@ public class Main extends Application {
     public javafx.scene.paint.Color getColour(int i) {
         if (i == 0){
             return Color.RED;
+
         } else if (i == 1) {
             return Color.BLUE;
+
         } else if (i == 2) {
             return Color.YELLOW;
+
         } else if (i == 3) {
             return Color.GREEN;
+
         } else if (i == 4) {
             return Color.PURPLE;
+
         } else if (i == 5) {
             return Color.ORANGE;
+
         } else {
             return Color.ANTIQUEWHITE;
         }
+    }
+
+
+    public void changeGrid() {
+        root.getChildren().remove(grid);
+        root.getChildren().remove(yellowButton);
+        root.getChildren().remove(blueButton);
+        root.getChildren().remove(redButton);
+
+        ObservableList<Color> colours = FXCollections.observableArrayList();
+        for (int i = 0; i<b.getSpaces().length; i++) {
+            for (int j = 0; j<b.getSpaces()[0].length; j++) {
+                colours.add(getColour(b.getSpaces()[i][j].getColour()));
+            }
+        }
+
+
+        grid = new GridView<Color>(colours);
+
+        grid.setCellFactory(new Callback<GridView<Color>, GridCell<Color>>() {
+            public GridCell<Color> call(GridView<Color> param) {
+
+                return new ColorGridCell();
+            }
+        });
+
+
+        grid.setCellHeight(45);
+        grid.setCellWidth(45);
+        grid.setHorizontalCellSpacing(0);
+        grid.setVerticalCellSpacing(0);
+
+        //root = new StackPane();
+        //root.setAlignment(Pos.BOTTOM_RIGHT);
+        StackPane.setMargin(grid, new Insets(8,8,8,8));
+        root.getChildren().add(grid);
+        root.getChildren().add(blueButton);
+        root.getChildren().add(redButton);
+        root.getChildren().add(yellowButton);
+
     }
 
     public void start(Stage primaryStage) throws Exception {
@@ -107,7 +202,7 @@ public class Main extends Application {
         };
 
 
-        ObservableList<Color> colours = FXCollections.observableArrayList();
+        colours = FXCollections.observableArrayList();
         for (int i = 0; i<b.getSpaces().length; i++) {
             for (int j = 0; j<b.getSpaces()[0].length; j++) {
                 colours.add(getColour(b.getSpaces()[i][j].getColour()));
@@ -115,31 +210,70 @@ public class Main extends Application {
         }
 
 
-        GridView<Color> grid = new GridView<Color>(colours);
+        grid = new GridView<Color>(colours);
+
         grid.setCellFactory(new Callback<GridView<Color>, GridCell<Color>>() {
             public GridCell<Color> call(GridView<Color> param) {
+
                 return new ColorGridCell();
             }
         });
+
+
         grid.setCellHeight(45);
         grid.setCellWidth(45);
         grid.setHorizontalCellSpacing(0);
         grid.setVerticalCellSpacing(0);
 
-        TextField textField = new TextField();
 
+        redButton = new Button("red");
+        redButton.setLayoutX(100);
+        redButton.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                changeColour(0);
+                changeGrid();
+                System.out.println();
+                b.printBoard();
+            }
+        });
+        blueButton = new Button("blue");
+        blueButton.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                changeColour(1);
+                changeGrid();
+                System.out.println();
+                b.printBoard();
+            }
+        });
+        yellowButton = new Button("yellow");
+        yellowButton.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                System.out.println("Type colour: ");
+                int colour = Integer.parseInt(kb.nextLine());
+                //changeColour(2);
+                changeColour(colour);
+                changeGrid();
+                System.out.println();
+                b.printBoard();
+            }
+        });
 
-
-        StackPane root = new StackPane();
-        root.setAlignment(Pos.BOTTOM_CENTER);
+        root = new StackPane();
         StackPane.setMargin(grid, new Insets(8,8,8,8));
+
         root.getChildren().add(grid);
-        root.getChildren().add(textField);
+        root.getChildren().add(blueButton);
+        root.getChildren().add(redButton);
+        root.getChildren().add(yellowButton);
+
         Scene scene = new Scene(root, 485, 575);
 
         primaryStage.setTitle("Flood It - Solver");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
+
+
+
     }
 }
