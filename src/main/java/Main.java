@@ -10,10 +10,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -35,7 +34,15 @@ public class Main extends Application {
     static Button redButton;
     static Button yellowButton;
     static Button blueButton;
+    static Button greenButton;
+    static Button purpleButton;
+    static Button orangeButton;
+    static Label numMovesLabel;
+    static int numMoves;
+
+
     Scanner kb = new Scanner(System.in);
+    static VBox vbox;
 
 
     public static void main(String[] args) {
@@ -153,10 +160,14 @@ public class Main extends Application {
 
 
     public void changeGrid() {
-        root.getChildren().remove(grid);
-        root.getChildren().remove(yellowButton);
-        root.getChildren().remove(blueButton);
-        root.getChildren().remove(redButton);
+        vbox.getChildren().remove(grid);
+        vbox.getChildren().remove(yellowButton);
+        vbox.getChildren().remove(blueButton);
+        vbox.getChildren().remove(redButton);
+        vbox.getChildren().remove(greenButton);
+        vbox.getChildren().remove(purpleButton);
+        vbox.getChildren().remove(orangeButton);
+        vbox.getChildren().remove(numMovesLabel);
 
         ObservableList<Color> colours = FXCollections.observableArrayList();
         for (int i = 0; i<b.getSpaces().length; i++) {
@@ -175,6 +186,8 @@ public class Main extends Application {
             }
         });
 
+        numMovesLabel = new Label("Number of moves: " + numMoves);
+
 
         grid.setCellHeight(45);
         grid.setCellWidth(45);
@@ -184,10 +197,7 @@ public class Main extends Application {
         //root = new StackPane();
         //root.setAlignment(Pos.BOTTOM_RIGHT);
         StackPane.setMargin(grid, new Insets(8,8,8,8));
-        root.getChildren().add(grid);
-        root.getChildren().add(blueButton);
-        root.getChildren().add(redButton);
-        root.getChildren().add(yellowButton);
+        vbox.getChildren().addAll(grid, yellowButton, blueButton, redButton, greenButton, purpleButton, orangeButton, numMovesLabel);
 
     }
 
@@ -200,6 +210,11 @@ public class Main extends Application {
                 return null;
             }
         };
+
+        vbox = new VBox(5);
+
+        numMoves = 0;
+
 
 
         colours = FXCollections.observableArrayList();
@@ -226,47 +241,93 @@ public class Main extends Application {
         grid.setVerticalCellSpacing(0);
 
 
-        redButton = new Button("red");
+        redButton = new Button("   ");
+        redButton.setStyle("-fx-background-color: red;");
         redButton.setLayoutX(100);
         redButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
+                numMoves++;
                 changeColour(0);
                 changeGrid();
                 System.out.println();
                 b.printBoard();
             }
         });
-        blueButton = new Button("blue");
+
+
+        blueButton = new Button("   ");
+        blueButton.setStyle("-fx-background-color: blue;");
         blueButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
+                numMoves++;
                 changeColour(1);
                 changeGrid();
                 System.out.println();
                 b.printBoard();
             }
         });
-        yellowButton = new Button("yellow");
+        yellowButton = new Button("   ");
+        yellowButton.setStyle("-fx-background-color: yellow;");
         yellowButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                System.out.println("Type colour: ");
-                int colour = Integer.parseInt(kb.nextLine());
-                //changeColour(2);
-                changeColour(colour);
+                numMoves++;
+                changeColour(2);
                 changeGrid();
                 System.out.println();
                 b.printBoard();
             }
         });
 
+        greenButton = new Button("   ");
+        greenButton.setStyle("-fx-background-color: green;");
+        greenButton.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                numMoves++;
+                changeColour(3);
+                changeGrid();
+                System.out.println();
+                b.printBoard();
+            }
+        });
+
+        purpleButton = new Button("   ");
+        purpleButton.setStyle("-fx-background-color: purple;");
+        purpleButton.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                numMoves++;
+                changeColour(4);
+                changeGrid();
+                System.out.println();
+                b.printBoard();
+
+            }
+        });
+
+        orangeButton = new Button("   ");
+        orangeButton.setStyle("-fx-background-color: orange;");
+        orangeButton.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                numMoves++;
+                changeColour(5);
+                changeGrid();
+                System.out.println();
+                b.printBoard();
+
+            }
+        });
+
+
+        numMovesLabel = new Label("Number of moves: " + numMoves);
+
+
+        vbox.getChildren().addAll(grid, yellowButton, blueButton, redButton, greenButton, purpleButton, orangeButton,numMovesLabel);
+
         root = new StackPane();
         StackPane.setMargin(grid, new Insets(8,8,8,8));
 
-        root.getChildren().add(grid);
-        root.getChildren().add(blueButton);
-        root.getChildren().add(redButton);
-        root.getChildren().add(yellowButton);
+        root.getChildren().addAll(vbox);
 
-        Scene scene = new Scene(root, 485, 575);
+        Scene scene = new Scene(root, 485, 675);
 
         primaryStage.setTitle("Flood It - Solver");
         primaryStage.setScene(scene);
