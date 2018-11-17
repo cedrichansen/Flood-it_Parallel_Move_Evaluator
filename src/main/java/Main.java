@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.controlsfx.control.GridCell;
@@ -181,8 +182,13 @@ public class Main extends Application {
 
         grid.setCellFactory(new Callback<GridView<Color>, GridCell<Color>>() {
             public GridCell<Color> call(GridView<Color> param) {
+                
+                ColorGridCell cell = new ColorGridCell();
 
-                return new ColorGridCell();
+                cell.setBorder(new Border(new BorderStroke(Color.BLACK,
+                        BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
+                return cell;
             }
         });
 
@@ -197,19 +203,11 @@ public class Main extends Application {
         //root = new StackPane();
         //root.setAlignment(Pos.BOTTOM_RIGHT);
         StackPane.setMargin(grid, new Insets(8,8,8,8));
-        vbox.getChildren().addAll(grid, yellowButton, blueButton, redButton, greenButton, purpleButton, orangeButton, numMovesLabel);
+        vbox.getChildren().addAll(grid,numMovesLabel, yellowButton, blueButton, redButton, greenButton, purpleButton, orangeButton);
 
     }
 
     public void start(Stage primaryStage) throws Exception {
-
-        Task<Void> gameBackGround = new Task<Void>() {
-
-            protected Void call() throws Exception {
-                playGame();
-                return null;
-            }
-        };
 
         vbox = new VBox(5);
 
@@ -229,8 +227,12 @@ public class Main extends Application {
 
         grid.setCellFactory(new Callback<GridView<Color>, GridCell<Color>>() {
             public GridCell<Color> call(GridView<Color> param) {
+                ColorGridCell cell = new ColorGridCell();
 
-                return new ColorGridCell();
+                cell.setBorder(new Border(new BorderStroke(Color.BLACK,
+                        BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
+                return cell;
             }
         });
 
@@ -318,9 +320,10 @@ public class Main extends Application {
 
 
         numMovesLabel = new Label("Number of moves: " + numMoves);
+        numMovesLabel.setFont(Font.font ("Verdana", 20));
+        vbox.setAlignment( Pos.BOTTOM_CENTER);
 
-
-        vbox.getChildren().addAll(grid, yellowButton, blueButton, redButton, greenButton, purpleButton, orangeButton,numMovesLabel);
+        vbox.getChildren().addAll(grid,numMovesLabel, yellowButton, blueButton, redButton, greenButton, purpleButton, orangeButton);
 
         root = new StackPane();
         StackPane.setMargin(grid, new Insets(8,8,8,8));
