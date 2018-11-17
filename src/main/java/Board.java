@@ -1,3 +1,5 @@
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -32,6 +34,53 @@ public class Board {
     }
 
 
+    public void changeColour(int newColour) {
+        Board b = this;
+
+        changeEncapsulatedColour(newColour);
+        assignNewEncapsulating(newColour, b);
+
+        int numEncapsulated = 1;
+        int prevNumEncapsulated = 0;
+
+        while (numEncapsulated != prevNumEncapsulated) {
+
+
+            b.assignNewEncapsulating(newColour, b);
+            prevNumEncapsulated = b.getNumEncapsulatedSpaces();
+
+            b.changeEncapsulatedColour(newColour);
+
+            b.assignNewEncapsulating(newColour, b);
+            numEncapsulated = b.getNumEncapsulatedSpaces();
+
+        }
+    }
+
+
+    public static javafx.scene.paint.Color getColour(int i) {
+        if (i == 0){
+            return Color.RED;
+
+        } else if (i == 1) {
+            return Color.BLUE;
+
+        } else if (i == 2) {
+            return Color.YELLOW;
+
+        } else if (i == 3) {
+            return Color.GREEN;
+
+        } else if (i == 4) {
+            return Color.PURPLE;
+
+        } else if (i == 5) {
+            return Color.ORANGE;
+
+        } else {
+            return Color.ANTIQUEWHITE;
+        }
+    }
 
 
 
