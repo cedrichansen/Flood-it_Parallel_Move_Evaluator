@@ -87,7 +87,6 @@ public class Board {
     //helper for changeEncapsulateColour
     public ArrayList<Space> getEncapsulatedSpaces(){
         ArrayList<Space> encapsulatedSpaces = new ArrayList<Space>();
-        numEncapsulatedSpaces = encapsulatedSpaces.size();
 
 
         for (int i=0; i<spaces.length; i++) {
@@ -98,6 +97,9 @@ public class Board {
                 }
             }
         }
+
+        numEncapsulatedSpaces = encapsulatedSpaces.size();
+
 
         if (encapsulatedSpaces.size()== spaces.length * spaces[0].length) {
             doneFlooding = true;

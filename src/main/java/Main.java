@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.controlsfx.control.GridCell;
@@ -51,9 +52,6 @@ public class Main extends Application {
         b = Board.generateRandomBoard(10, 10, 6);
         b.printBoard();
 
-        //playGame();
-
-
         launch(args);
 
 
@@ -76,20 +74,19 @@ public class Main extends Application {
             b.changeEncapsulatedColour(newColour);
 
             b.assignNewEncapsulating(newColour, b);
-
             numEncapsulated = b.getNumEncapsulatedSpaces();
 
-            b.changeEncapsulatedColour(newColour);
-
-            b.assignNewEncapsulating(newColour, b);
-
-            b.changeEncapsulatedColour(newColour);
-
-            b.assignNewEncapsulating(newColour, b);
-
-            b.changeEncapsulatedColour(newColour);
-
-            b.assignNewEncapsulating(newColour, b);
+//            b.changeEncapsulatedColour(newColour);
+//
+//            b.assignNewEncapsulating(newColour, b);
+//
+//            b.changeEncapsulatedColour(newColour);
+//
+//            b.assignNewEncapsulating(newColour, b);
+//
+//            b.changeEncapsulatedColour(newColour);
+//
+//            b.assignNewEncapsulating(newColour, b);
 
 
         }
@@ -170,10 +167,18 @@ public class Main extends Application {
         vbox.getChildren().remove(orangeButton);
         vbox.getChildren().remove(numMovesLabel);
 
+        boolean gameFinished = false;
+        int numColours = 0;
+
         ObservableList<Color> colours = FXCollections.observableArrayList();
         for (int i = 0; i<b.getSpaces().length; i++) {
             for (int j = 0; j<b.getSpaces()[0].length; j++) {
+
                 colours.add(getColour(b.getSpaces()[i][j].getColour()));
+                if (!colours.contains(getColour(b.getSpaces()[i][j].getColour()))) {
+                    numColours++;
+                }
+
             }
         }
 
@@ -182,7 +187,7 @@ public class Main extends Application {
 
         grid.setCellFactory(new Callback<GridView<Color>, GridCell<Color>>() {
             public GridCell<Color> call(GridView<Color> param) {
-                
+
                 ColorGridCell cell = new ColorGridCell();
 
                 cell.setBorder(new Border(new BorderStroke(Color.BLACK,
@@ -192,7 +197,12 @@ public class Main extends Application {
             }
         });
 
-        numMovesLabel = new Label("Number of moves: " + numMoves);
+        numMovesLabel.setText("Number of moves: " + numMoves);
+        Label finishedLabel = new Label();
+        if (numColours == 1) {
+            finishedLabel.setText("The game is done");
+            gameFinished = true;
+        }
 
 
         grid.setCellHeight(45);
@@ -204,6 +214,9 @@ public class Main extends Application {
         //root.setAlignment(Pos.BOTTOM_RIGHT);
         StackPane.setMargin(grid, new Insets(8,8,8,8));
         vbox.getChildren().addAll(grid,numMovesLabel, yellowButton, blueButton, redButton, greenButton, purpleButton, orangeButton);
+        if (gameFinished) {
+            vbox.getChildren().add(finishedLabel);
+        }
 
     }
 
@@ -320,7 +333,7 @@ public class Main extends Application {
 
 
         numMovesLabel = new Label("Number of moves: " + numMoves);
-        numMovesLabel.setFont(Font.font ("Verdana", 20));
+        numMovesLabel.setFont(Font.font ("Verdana", FontWeight.BOLD,20));
         vbox.setAlignment( Pos.BOTTOM_CENTER);
 
         vbox.getChildren().addAll(grid,numMovesLabel, yellowButton, blueButton, redButton, greenButton, purpleButton, orangeButton);
