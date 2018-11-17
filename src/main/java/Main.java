@@ -167,18 +167,11 @@ public class Main extends Application {
         vbox.getChildren().remove(orangeButton);
         vbox.getChildren().remove(numMovesLabel);
 
-        boolean gameFinished = false;
-        int numColours = 0;
 
         ObservableList<Color> colours = FXCollections.observableArrayList();
         for (int i = 0; i<b.getSpaces().length; i++) {
             for (int j = 0; j<b.getSpaces()[0].length; j++) {
-
                 colours.add(getColour(b.getSpaces()[i][j].getColour()));
-                if (!colours.contains(getColour(b.getSpaces()[i][j].getColour()))) {
-                    numColours++;
-                }
-
             }
         }
 
@@ -199,11 +192,7 @@ public class Main extends Application {
 
         numMovesLabel.setText("Number of moves: " + numMoves);
         Label finishedLabel = new Label();
-        if (numColours == 1) {
-            finishedLabel.setText("The game is done");
-            gameFinished = true;
-        }
-
+        finishedLabel.setText("Game is done!");
 
         grid.setCellHeight(45);
         grid.setCellWidth(45);
@@ -214,7 +203,7 @@ public class Main extends Application {
         //root.setAlignment(Pos.BOTTOM_RIGHT);
         StackPane.setMargin(grid, new Insets(8,8,8,8));
         vbox.getChildren().addAll(grid,numMovesLabel, yellowButton, blueButton, redButton, greenButton, purpleButton, orangeButton);
-        if (gameFinished) {
+        if (b.isDoneFlooding()) {
             vbox.getChildren().add(finishedLabel);
         }
 
@@ -261,11 +250,13 @@ public class Main extends Application {
         redButton.setLayoutX(100);
         redButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                numMoves++;
-                changeColour(0);
-                changeGrid();
-                System.out.println();
-                b.printBoard();
+                if (b.getSpaces()[0][0].getColour() != 0 && !b.isDoneFlooding()) {
+                    numMoves++;
+                    changeColour(0);
+                    changeGrid();
+                    System.out.println();
+                    b.printBoard();
+                }
             }
         });
 
@@ -274,22 +265,26 @@ public class Main extends Application {
         blueButton.setStyle("-fx-background-color: blue;");
         blueButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                numMoves++;
-                changeColour(1);
-                changeGrid();
-                System.out.println();
-                b.printBoard();
+                if (b.getSpaces()[0][0].getColour() != 1 && !b.isDoneFlooding()) {
+                    numMoves++;
+                    changeColour(1);
+                    changeGrid();
+                    System.out.println();
+                    b.printBoard();
+                }
             }
         });
         yellowButton = new Button("   ");
         yellowButton.setStyle("-fx-background-color: yellow;");
         yellowButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                numMoves++;
-                changeColour(2);
-                changeGrid();
-                System.out.println();
-                b.printBoard();
+                if (b.getSpaces()[0][0].getColour() != 2 && !b.isDoneFlooding()) {
+                    numMoves++;
+                    changeColour(2);
+                    changeGrid();
+                    System.out.println();
+                    b.printBoard();
+                }
             }
         });
 
@@ -297,11 +292,13 @@ public class Main extends Application {
         greenButton.setStyle("-fx-background-color: green;");
         greenButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                numMoves++;
-                changeColour(3);
-                changeGrid();
-                System.out.println();
-                b.printBoard();
+                if (b.getSpaces()[0][0].getColour() != 3 && !b.isDoneFlooding()) {
+                    numMoves++;
+                    changeColour(3);
+                    changeGrid();
+                    System.out.println();
+                    b.printBoard();
+                }
             }
         });
 
@@ -309,12 +306,14 @@ public class Main extends Application {
         purpleButton.setStyle("-fx-background-color: purple;");
         purpleButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                numMoves++;
-                changeColour(4);
-                changeGrid();
-                System.out.println();
-                b.printBoard();
+                if (b.getSpaces()[0][0].getColour() != 4 && !b.isDoneFlooding()) {
+                    numMoves++;
+                    changeColour(4);
+                    changeGrid();
+                    System.out.println();
+                    b.printBoard();
 
+                }
             }
         });
 
@@ -322,12 +321,14 @@ public class Main extends Application {
         orangeButton.setStyle("-fx-background-color: orange;");
         orangeButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                numMoves++;
-                changeColour(5);
-                changeGrid();
-                System.out.println();
-                b.printBoard();
+                if (b.getSpaces()[0][0].getColour() != 5 && !b.isDoneFlooding()) {
+                    numMoves++;
+                    changeColour(5);
+                    changeGrid();
+                    System.out.println();
+                    b.printBoard();
 
+                }
             }
         });
 
