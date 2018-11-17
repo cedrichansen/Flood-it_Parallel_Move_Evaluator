@@ -38,7 +38,7 @@ public class Board {
         Board b = this;
 
         changeEncapsulatedColour(newColour);
-        assignNewEncapsulating(newColour, b);
+        assignNewEncapsulating(b);
 
         int numEncapsulated = 1;
         int prevNumEncapsulated = 0;
@@ -46,12 +46,12 @@ public class Board {
         while (numEncapsulated != prevNumEncapsulated) {
 
 
-            b.assignNewEncapsulating(newColour, b);
+            b.assignNewEncapsulating(b);
             prevNumEncapsulated = b.getNumEncapsulatedSpaces();
 
             b.changeEncapsulatedColour(newColour);
 
-            b.assignNewEncapsulating(newColour, b);
+            b.assignNewEncapsulating(b);
             numEncapsulated = b.getNumEncapsulatedSpaces();
 
         }
@@ -84,7 +84,7 @@ public class Board {
 
 
 
-    public void assignNewEncapsulating(int newColour, Board b) {
+    public void assignNewEncapsulating(Board b) {
         encapsulatedSpaces = getEncapsulatedSpaces();
 
         for (Space s : encapsulatedSpaces) {
