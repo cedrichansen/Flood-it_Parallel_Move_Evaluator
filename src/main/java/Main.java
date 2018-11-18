@@ -25,6 +25,7 @@ import org.controlsfx.control.cell.ColorGridCell;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Stack;
+import java.util.concurrent.ForkJoinPool;
 
 public class Main extends Application {
 
@@ -56,6 +57,10 @@ public class Main extends Application {
 
         b = Board.generateRandomBoard(10, 10, 6);
         b.printBoard();
+
+
+        ForkJoinPool childBoardSolver = new ForkJoinPool();
+        childBoardSolver.invoke(b);
 
         vbox = new VBox(5);
 

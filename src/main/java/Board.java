@@ -1,9 +1,12 @@
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.RecursiveAction;
+import java.util.concurrent.RecursiveTask;
 
-public class Board {
+public class Board extends RecursiveAction {
 
 
     //no need to keep track of which state the current colour of encapsulated section, because it will always be the
@@ -15,14 +18,89 @@ public class Board {
     private         int                 numEncapsulatedSpaces;
     private         boolean             doneFlooding = false;
 
+    private         Board               parent;
+                    int[]               stepsTaken;
+
+    static          Board               solution;
+
 
 
     //generateInitial board
-    public Board(Space[][] spaces, int steps, int numColours) {
+    public Board(Space[][] spaces, int steps, int numColours, Board p) {
 
         this.spaces = spaces;
         numStepsTaken = steps;
         this.numColours = numColours;
+        parent = p;
+        stepsTaken = new int[20];
+    }
+
+
+
+    protected void compute() {
+
+        if (!doneFlooding && solution == null) {
+
+            System.out.println("splitting task");
+            List<Board> subtasks =
+                    new ArrayList<Board>();
+
+            subtasks.addAll(getNextBoards());
+
+            for (Board b : subtasks ) {
+                b.fork();
+            }
+
+
+        } else {
+
+            solution = this;
+        }
+
+    }
+
+
+
+    public ArrayList<Board> getNextBoards(){
+
+        //save parent board
+        final Board parent = this;
+        int numSteps = parent.numStepsTaken + 1;
+
+        Board [] copies = {
+                new Board(parent.spaces,numSteps , 6, parent),
+                new Board(parent.spaces,numSteps , 6, parent),
+                new Board(parent.spaces,numSteps , 6, parent),
+                new Board(parent.spaces,numSteps , 6, parent),
+                new Board(parent.spaces,numSteps , 6, parent),
+                new Board(parent.spaces,numSteps , 6, parent)
+        };
+
+        ArrayList<Board> childBoards = new ArrayList<>();
+
+        for (int i=0; i<6; i++) {
+            if (colourChangesDoesSomething(i, parent)) {
+
+                System.out.printf("child board: " + i + "\n");
+                copies[i].printBoard();
+                System.out.println();
+
+                copies[i].changeColour(i);
+                childBoards.add(copies[i]);
+            }
+        }
+
+        return childBoards;
+    }
+
+
+    public boolean colourChangesDoesSomething(int colour, final Board parent) {
+
+        int beforeChange = parent.getEncapsulatedSpaces().size();
+        parent.changeColour(colour);
+        int afterChange = parent.getEncapsulatedSpaces().size();
+
+        return beforeChange != afterChange;
     }
 
 
@@ -164,7 +242,7 @@ public class Board {
         }
         firstSpaces[0][0].setEncapsulated(true);   // Space at [0][0] is by default the starting point, so it must be encapsulated
 
-        Board firstBoard = new Board(firstSpaces, 0, numColours);
+        Board firstBoard = new Board(firstSpaces, 0, numColours, null);
         return firstBoard;
     }
 
@@ -219,7 +297,6 @@ public class Board {
     public boolean isDoneFlooding() {
         return doneFlooding;
     }
-
 
 
 
