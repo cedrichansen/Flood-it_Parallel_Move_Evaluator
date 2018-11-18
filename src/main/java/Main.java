@@ -92,6 +92,8 @@ public class Main extends Application {
 
 
         redButton = new Button("   ");
+        redButton.setBorder(new Border(new BorderStroke(Color.BLACK,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         redButton.setStyle("-fx-background-color: red;");
         redButton.setLayoutX(100);
         redButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -109,6 +111,8 @@ public class Main extends Application {
 
         blueButton = new Button("   ");
         blueButton.setStyle("-fx-background-color: blue;");
+        blueButton.setBorder(new Border(new BorderStroke(Color.BLACK,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         blueButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 if (b.getSpaces()[0][0].getColour() != 1 && !b.isDoneFlooding()) {
@@ -122,6 +126,8 @@ public class Main extends Application {
         });
         yellowButton = new Button("   ");
         yellowButton.setStyle("-fx-background-color: yellow;");
+        yellowButton.setBorder(new Border(new BorderStroke(Color.BLACK,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         yellowButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 if (b.getSpaces()[0][0].getColour() != 2 && !b.isDoneFlooding()) {
@@ -136,6 +142,8 @@ public class Main extends Application {
 
         greenButton = new Button("   ");
         greenButton.setStyle("-fx-background-color: green;");
+        greenButton.setBorder(new Border(new BorderStroke(Color.BLACK,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         greenButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 if (b.getSpaces()[0][0].getColour() != 3 && !b.isDoneFlooding()) {
@@ -150,6 +158,8 @@ public class Main extends Application {
 
         purpleButton = new Button("   ");
         purpleButton.setStyle("-fx-background-color: purple;");
+        purpleButton.setBorder(new Border(new BorderStroke(Color.BLACK,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         purpleButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 if (b.getSpaces()[0][0].getColour() != 4 && !b.isDoneFlooding()) {
@@ -165,6 +175,8 @@ public class Main extends Application {
 
         orangeButton = new Button("   ");
         orangeButton.setStyle("-fx-background-color: orange;");
+        orangeButton.setBorder(new Border(new BorderStroke(Color.BLACK,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         orangeButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 if (b.getSpaces()[0][0].getColour() != 5 && !b.isDoneFlooding()) {

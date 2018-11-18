@@ -22,15 +22,7 @@ public class Board {
 
         this.spaces = spaces;
         numStepsTaken = steps;
-    }
-
-    //Generate a subsequent board to initial one
-    public Board(Board b, int newColour) {
-
-        //TODO call a function that appropriatly modifies the spaces
-        this.spaces = b.spaces;
-        this.numStepsTaken = b.numStepsTaken++;
-        this.numColours = b.numColours;
+        this.numColours = numColours;
     }
 
 
