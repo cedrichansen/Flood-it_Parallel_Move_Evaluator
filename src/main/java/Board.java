@@ -74,7 +74,11 @@ public class Board extends RecursiveAction {
             subtasks.addAll(getNextBoards());
 
             for (Board b : subtasks) {
-                b.fork();
+                //18 steps is criterion for winning the game
+                if (b.getNumStepsTaken() <= 18) {
+                    b.fork();
+
+                }
             }
 
 
