@@ -35,8 +35,8 @@ public class Board extends RecursiveAction {
 
     //used to copy a parent board --> this board will become a child of Board b
     public Board(Board b) {
-        this.spaces = b.spaces;
-        this.numStepsTaken = b.numStepsTaken;
+        this.spaces = cloneSpaces(b);
+        this.numStepsTaken = b.numStepsTaken + 1;
         this.numColours = b.numColours;
 
         //the board that is being copied will be the parent
@@ -98,6 +98,22 @@ public class Board extends RecursiveAction {
         }
 
         return childBoards;
+    }
+
+
+    public Space [][] cloneSpaces (Board b) {
+        int l= b.spaces.length;
+        int w = b.spaces[0].length;
+        Space [][] newSpaces = new Space[l][w];
+        for (int i =0; i<l; i++) {
+            for (int j = 0; j<w;j++) {
+                Space old = b.spaces[i][j];
+                Space temp = new Space(old.getColour(), old.isEncapsulated(), old.getI(), old.getJ());
+                newSpaces[i][j] = temp;
+            }
+        }
+
+        return newSpaces;
     }
 
 
