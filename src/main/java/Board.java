@@ -74,6 +74,7 @@ public class Board extends RecursiveAction {
         final Board parent = this;
         int numSteps = parent.numStepsTaken + 1;
 
+        //create copies of the parent to be changed -- each of these correspond to a certain colour change
         Board a =new Board(parent);
         Board b =new Board(parent);
         Board c =new Board(parent);
@@ -100,11 +101,11 @@ public class Board extends RecursiveAction {
     }
 
 
-    public boolean colourChangesDoesSomething(int colour, final Board parent) {
+    public boolean colourChangesDoesSomething(int colour, Board child) {
 
-        int beforeChange = parent.getEncapsulatedSpaces().size();
-        parent.changeColour(colour);
-        int afterChange = parent.getEncapsulatedSpaces().size();
+        int beforeChange = child.getEncapsulatedSpaces().size();
+        child.changeColour(colour);
+        int afterChange = child.getEncapsulatedSpaces().size();
 
         return beforeChange != afterChange;
     }
