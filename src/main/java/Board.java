@@ -13,7 +13,7 @@ public class Board {
     private         int                 numColours;
     private         ArrayList<Space>    encapsulatedSpaces;
     private         int                 numEncapsulatedSpaces;
-    private         boolean             doneFlooding = false;
+    private         boolean             doneFlooding                = false;
 
 
 

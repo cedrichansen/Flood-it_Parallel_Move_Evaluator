@@ -29,20 +29,20 @@ import java.util.Stack;
 public class Main extends Application {
 
 
-    static Board b;
+    static      Board                   b;
+    static      int                     numMoves;
 
-    static Pane root;
-    static GridView<Color> grid;
-    static ObservableList<Color> colours;
-    static Button redButton;
-    static Button yellowButton;
-    static Button blueButton;
-    static Button greenButton;
-    static Button purpleButton;
-    static Button orangeButton;
-    static Label numMovesLabel;
-    static int numMoves;
-    static VBox vbox;
+    static      Pane                    root;
+    static      GridView<Color>         grid;
+    static      ObservableList<Color>   colours;
+    static      Button                  redButton;
+    static      Button                  yellowButton;
+    static      Button                  blueButton;
+    static      Button                  greenButton;
+    static      Button                  purpleButton;
+    static      Button                  orangeButton;
+    static      Label                   numMovesLabel;
+    static      VBox                    vbox;
 
 
     public static void main(String[] args) {
