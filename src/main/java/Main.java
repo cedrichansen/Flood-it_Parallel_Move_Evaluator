@@ -25,30 +25,31 @@ import org.controlsfx.control.cell.ColorGridCell;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Stack;
+import java.util.concurrent.ForkJoinPool;
 
 public class Main extends Application {
 
 
-    static      Board                   b;
-    static      int                     numMoves;
 
-    static      Pane                    root;
-    static      GridView<Color>         grid;
-    static      ObservableList<Color>   colours;
-    static      Button                  redButton;
-    static      Button                  yellowButton;
-    static      Button                  blueButton;
-    static      Button                  greenButton;
-    static      Button                  purpleButton;
-    static      Button                  orangeButton;
-    static      Label                   numMovesLabel;
-    static      VBox                    vbox;
+    private static Board                    b;
+    private static int                      numMoves;
+
+    private static Pane                     root;
+    private static GridView<Color>          grid;
+    private static ObservableList<Color>    colours;
+    private static Button                   redButton;
+    private static Button                   yellowButton;
+    private static Button                   blueButton;
+    private static Button                   greenButton;
+    private static Button                   purpleButton;
+    private static Button                   orangeButton;
+    private static Label                    numMovesLabel;
+    private static VBox                     vbox;
 
 
     public static void main(String[] args) {
 
         launch(args);
-
 
     }
 
@@ -57,11 +58,14 @@ public class Main extends Application {
         b = Board.generateRandomBoard(10, 10, 6);
         b.printBoard();
 
+        Board boardToSolve = new Board(b);
+
+        ForkJoinPool childBoardSolver = new ForkJoinPool();
+        childBoardSolver.invoke(boardToSolve);
+
         vbox = new VBox(5);
 
         numMoves = 0;
-
-
 
         colours = FXCollections.observableArrayList();
         for (int i = 0; i<b.getSpaces().length; i++) {
