@@ -19,8 +19,6 @@ public class Board extends RecursiveAction {
     private         boolean             doneFlooding = false;
 
     private         Board               parent;
-                    int[]               stepsTaken;
-
     static          Board               solution;
 
 
@@ -32,7 +30,17 @@ public class Board extends RecursiveAction {
         numStepsTaken = steps;
         this.numColours = numColours;
         parent = p;
-        stepsTaken = new int[20];
+    }
+
+
+    //used to copy a parent board --> this board will become a child of Board b
+    public Board(Board b) {
+        this.spaces = b.spaces;
+        this.numStepsTaken = b.numStepsTaken;
+        this.numColours = b.numColours;
+
+        //the board that is being copied will be the parent
+        parent = b;
     }
 
 
@@ -67,14 +75,14 @@ public class Board extends RecursiveAction {
         final Board parent = this;
         int numSteps = parent.numStepsTaken + 1;
 
-        Board [] copies = {
-                new Board(parent.spaces,numSteps , 6, parent),
-                new Board(parent.spaces,numSteps , 6, parent),
-                new Board(parent.spaces,numSteps , 6, parent),
-                new Board(parent.spaces,numSteps , 6, parent),
-                new Board(parent.spaces,numSteps , 6, parent),
-                new Board(parent.spaces,numSteps , 6, parent)
-        };
+        Board a =new Board(parent);
+        Board b =new Board(parent);
+        Board c =new Board(parent);
+        Board d =new Board(parent);
+        Board e =new Board(parent);
+        Board f =new Board(parent);
+
+        Board [] copies = {a,b,c,d,e,f};
 
         ArrayList<Board> childBoards = new ArrayList<>();
 
@@ -84,8 +92,7 @@ public class Board extends RecursiveAction {
                 System.out.printf("child board: " + i + "\n");
                 copies[i].printBoard();
                 System.out.println();
-
-                copies[i].changeColour(i);
+                //copies[i].changeColour(i);
                 childBoards.add(copies[i]);
             }
         }
