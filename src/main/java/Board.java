@@ -50,8 +50,7 @@ public class Board extends RecursiveAction {
         if (!doneFlooding && solution == null) {
 
             System.out.println("splitting task");
-            List<Board> subtasks =
-                    new ArrayList<Board>();
+            List<Board> subtasks = new ArrayList<Board>();
 
             subtasks.addAll(getNextBoards());
 
@@ -87,7 +86,7 @@ public class Board extends RecursiveAction {
         ArrayList<Board> childBoards = new ArrayList<>();
 
         for (int i=0; i<6; i++) {
-            if (colourChangesDoesSomething(i, parent)) {
+            if (colourChangesDoesSomething(i, copies[i])) {
 
                 System.out.printf("child board: " + i + "\n");
                 copies[i].printBoard();

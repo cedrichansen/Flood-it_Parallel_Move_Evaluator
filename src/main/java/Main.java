@@ -30,20 +30,20 @@ import java.util.concurrent.ForkJoinPool;
 public class Main extends Application {
 
 
-    static Board b;
+    private static Board b;
 
-    static Pane root;
-    static GridView<Color> grid;
-    static ObservableList<Color> colours;
-    static Button redButton;
-    static Button yellowButton;
-    static Button blueButton;
-    static Button greenButton;
-    static Button purpleButton;
-    static Button orangeButton;
-    static Label numMovesLabel;
-    static int numMoves;
-    static VBox vbox;
+    private static Pane root;
+    private static GridView<Color> grid;
+    private static ObservableList<Color> colours;
+    private static Button redButton;
+    private static Button yellowButton;
+    private static Button blueButton;
+    private static Button greenButton;
+    private static Button purpleButton;
+    private static Button orangeButton;
+    private static Label numMovesLabel;
+    private static int numMoves;
+    private static VBox vbox;
 
 
     public static void main(String[] args) {
