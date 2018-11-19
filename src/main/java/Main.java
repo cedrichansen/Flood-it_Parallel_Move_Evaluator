@@ -57,8 +57,10 @@ public class Main extends Application {
         b = Board.generateRandomBoard(10, 10, 6);
         b.printBoard();
 
+        Board boardToSolve = new Board(b);
+
         ForkJoinPool childBoardSolver = new ForkJoinPool();
-        childBoardSolver.invoke(b);
+        childBoardSolver.invoke(boardToSolve);
 
         vbox = new VBox(5);
 

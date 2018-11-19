@@ -1,8 +1,6 @@
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.RecursiveTask;
 
@@ -44,6 +42,27 @@ public class Board extends RecursiveAction {
     }
 
 
+    public ArrayList<Color> getStepsToSolveBoard(Board sol) {
+        for (;;) {
+            if (solution != null) {
+                ArrayList <Color> steps = new ArrayList<>();
+
+                Board temp = solution;
+                steps.add(getColour(temp.getSpaces()[0][0].getColour()));
+
+                while (temp.parent != null) {
+                    temp = temp.parent;
+                    steps.add(getColour(temp.getSpaces()[0][0].getColour()));
+                }
+
+
+                Collections.reverse(steps);
+                return steps ;
+
+            }
+        }
+    }
+
 
     protected void compute() {
 
@@ -54,7 +73,7 @@ public class Board extends RecursiveAction {
 
             subtasks.addAll(getNextBoards());
 
-            for (Board b : subtasks ) {
+            for (Board b : subtasks) {
                 b.fork();
             }
 
