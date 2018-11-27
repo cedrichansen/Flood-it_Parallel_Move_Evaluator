@@ -2,9 +2,8 @@ import javafx.scene.paint.Color;
 
 import java.util.*;
 import java.util.concurrent.RecursiveAction;
-import java.util.concurrent.RecursiveTask;
 
-public class Board extends RecursiveAction {
+public class Board extends RecursiveAction implements Comparable {
 
 
     //no need to keep track of which state the current colour of encapsulated section, because it will always be the
@@ -17,8 +16,11 @@ public class Board extends RecursiveAction {
     private         boolean             doneFlooding                = false;
 
     private         Board               parent;
-    static          Board               solution;
+            static  Board               solution;
 
+    static          int                 numAttempts                 = 0;
+
+    static          ArrayList<String>   cToWin                      = new ArrayList<>();
 
 
     //generateInitial board
@@ -41,6 +43,11 @@ public class Board extends RecursiveAction {
         parent = b;
     }
 
+
+    public synchronized int increaseNumPathsAttempted() {
+        numAttempts++;
+        return numAttempts;
+    }
 
     public ArrayList<Color> getStepsToSolveBoard(Board sol) {
         for (;;) {
@@ -75,16 +82,29 @@ public class Board extends RecursiveAction {
 
             for (Board b : subtasks) {
                 //18 steps is criterion for winning the game
-                if (b.getNumStepsTaken() <= 18) {
+                if (b.getNumStepsTaken() <= 30) {
                     b.fork();
-
+                } else {
+                    //System.out.println("path terminated --- did not find solution quickly enough");
+                    System.out.println("Failed Boards: " + increaseNumPathsAttempted());
                 }
             }
 
 
         } else {
+            if (solution == null) {
+                System.out.println("Solution has been found!");
+                solution = this;
+                solution.printBoard();
 
-            solution = this;
+                ArrayList<Color> sColours = getStepsToSolveBoard(solution);
+
+                System.out.println("Steps to solve board\n");
+                for (Color c : sColours) {
+                    System.out.println(printColour(c.toString()));
+                }
+            }
+
         }
 
     }
@@ -95,7 +115,6 @@ public class Board extends RecursiveAction {
 
         //save parent board
         final Board parent = this;
-        int numSteps = parent.numStepsTaken + 1;
 
         //create copies of the parent to be changed -- each of these correspond to a certain colour change
         Board a =new Board(parent);
@@ -109,17 +128,25 @@ public class Board extends RecursiveAction {
 
         ArrayList<Board> childBoards = new ArrayList<>();
 
-        for (int i=0; i<6; i++) {
-            if (colourChangesDoesSomething(i, copies[i])) {
+        if (parent.numStepsTaken > 3 && parent.numStepsTaken <12) {
 
-                System.out.printf("child board: " + i + "\n");
-                copies[i].printBoard();
-                System.out.println();
-                //copies[i].changeColour(i);
-                childBoards.add(copies[i]);
+            for (int i=0; i<6; i++) {
+                if (3 < getNumAdditionalEncapsulatedSpaces(i, copies[i])) {
+                    childBoards.add(copies[i]);
+                }
+            }
+
+        } else {
+            for (int i = 0; i < 6; i++) {
+                if (0 < getNumAdditionalEncapsulatedSpaces(i, copies[i])) {
+
+                    childBoards.add(copies[i]);
+                }
             }
         }
 
+
+        Collections.sort(childBoards);
         return childBoards;
     }
 
@@ -140,13 +167,13 @@ public class Board extends RecursiveAction {
     }
 
 
-    public boolean colourChangesDoesSomething(int colour, Board child) {
+    public int getNumAdditionalEncapsulatedSpaces(int colour, Board child) {
 
         int beforeChange = child.getEncapsulatedSpaces().size();
         child.changeColour(colour);
         int afterChange = child.getEncapsulatedSpaces().size();
 
-        return beforeChange != afterChange;
+        return afterChange-beforeChange;
     }
 
 
@@ -170,6 +197,25 @@ public class Board extends RecursiveAction {
             b.assignNewEncapsulating(b);
             numEncapsulated = b.getNumEncapsulatedSpaces();
 
+        }
+    }
+
+
+    public static String printColour(String hex) {
+        if (hex.equals("0xffff00ff")) {
+            return "yellow";
+        } else if (hex.equals("0x008000ff")) {
+            return "green";
+        } else if (hex.equals("0xffa500ff")) {
+            return "orange";
+        } else if (hex.equals("0x0000ffff")) {
+            return "blue";
+        } else if (hex.equals("0xff0000ff")) {
+            return "red";
+        } else if (hex.equals("0x800080ff")) {
+            return "purple";
+        } else {
+            return "unknown colour";
         }
     }
 
@@ -345,5 +391,8 @@ public class Board extends RecursiveAction {
     }
 
 
-
+    @Override
+    public int compareTo(Object o) {
+        return ((Board)o).getNumEncapsulatedSpaces() - this.getNumEncapsulatedSpaces();
+    }
 }
