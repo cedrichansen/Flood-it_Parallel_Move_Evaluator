@@ -81,13 +81,11 @@ public class Board extends RecursiveAction implements Comparable {
         if (!doneFlooding && solution == null) {
 
             System.out.println("splitting task");
-            List<Board> subtasks = new ArrayList<Board>();
-
-            subtasks.addAll(getNextBoards());
+            List<Board> subtasks = new ArrayList<Board>(getNextBoards());
 
             for (Board b : subtasks) {
                 //18 steps is criterion for winning the game
-                if (b.getNumStepsTaken() <= 19) {
+                if (b.getNumStepsTaken() <= 17) {
                     b.fork();
                 } else {
                     //System.out.println("path terminated --- did not find solution quickly enough");
@@ -135,7 +133,7 @@ public class Board extends RecursiveAction implements Comparable {
 
         ArrayList<Board> childBoards = new ArrayList<>();
 
-        if (parent.numStepsTaken >= 3 && parent.numStepsTaken <=14) {
+        if (parent.numStepsTaken >= 3 && parent.numStepsTaken <=13) {
 
             for (int i=0; i<6; i++) {
                 if (3 < getNumAdditionalEncapsulatedSpaces(i, copies[i])) {
