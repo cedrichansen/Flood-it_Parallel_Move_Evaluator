@@ -103,7 +103,7 @@ public class Board extends RecursiveAction implements Comparable {
                 ArrayList<Color> sColours = getStepsToSolveBoard(solution);
 
                 System.out.println("Steps to solve board\n");
-                int count = 0;
+                int count = 1;
                 for (Color c : sColours) {
                     System.out.println(count + " : " + printColour(c.toString()));
                     count++;
