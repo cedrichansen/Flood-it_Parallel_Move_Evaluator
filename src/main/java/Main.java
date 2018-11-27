@@ -103,7 +103,7 @@ public class Main extends Application {
         redButton.setLayoutX(100);
         redButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                if (b.getSpaces()[0][0].getColour() != 0 && !b.isDoneFlooding()) {
+                if ((b.getSpaces()[0][0].getColour() != 0  || numMoves == 0)&& !b.isDoneFlooding()) {
                     numMoves++;
                     b.changeColour(0);
                     changeGrid();
@@ -120,7 +120,7 @@ public class Main extends Application {
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         blueButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                if (b.getSpaces()[0][0].getColour() != 1 && !b.isDoneFlooding()) {
+                if ((b.getSpaces()[0][0].getColour() != 1  || numMoves == 0)&& !b.isDoneFlooding()) {
                     numMoves++;
                     b.changeColour(1);
                     changeGrid();
@@ -135,7 +135,7 @@ public class Main extends Application {
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         yellowButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                if (b.getSpaces()[0][0].getColour() != 2 && !b.isDoneFlooding()) {
+                if ((b.getSpaces()[0][0].getColour() != 2  || numMoves == 0)&& !b.isDoneFlooding()) {
                     numMoves++;
                     b.changeColour(2);
                     changeGrid();
@@ -151,7 +151,7 @@ public class Main extends Application {
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         greenButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                if (b.getSpaces()[0][0].getColour() != 3 && !b.isDoneFlooding()) {
+                if ((b.getSpaces()[0][0].getColour() != 3  || numMoves ==0)&& !b.isDoneFlooding()) {
                     numMoves++;
                     b.changeColour(3);
                     changeGrid();
@@ -167,7 +167,7 @@ public class Main extends Application {
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         purpleButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                if (b.getSpaces()[0][0].getColour() != 4 && !b.isDoneFlooding()) {
+                if ((b.getSpaces()[0][0].getColour() != 4 || numMoves == 0)&& !b.isDoneFlooding()) {
                     numMoves++;
                     b.changeColour(4);
                     changeGrid();
@@ -184,7 +184,7 @@ public class Main extends Application {
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         orangeButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                if (b.getSpaces()[0][0].getColour() != 5 && !b.isDoneFlooding()) {
+                if ((b.getSpaces()[0][0].getColour() != 5 || numMoves == 0)&& !b.isDoneFlooding()) {
                     numMoves++;
                     b.changeColour(5);
                     changeGrid();

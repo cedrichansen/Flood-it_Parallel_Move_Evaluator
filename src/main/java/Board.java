@@ -62,6 +62,9 @@ public class Board extends RecursiveAction implements Comparable {
                     steps.add(getColour(temp.getSpaces()[0][0].getColour()));
                 }
 
+                //remove last parent because it's technically not a step
+                steps.remove(temp);
+
 
                 Collections.reverse(steps);
                 return steps ;
@@ -82,7 +85,7 @@ public class Board extends RecursiveAction implements Comparable {
 
             for (Board b : subtasks) {
                 //18 steps is criterion for winning the game
-                if (b.getNumStepsTaken() <= 30) {
+                if (b.getNumStepsTaken() <= 20) {
                     b.fork();
                 } else {
                     //System.out.println("path terminated --- did not find solution quickly enough");
@@ -100,8 +103,10 @@ public class Board extends RecursiveAction implements Comparable {
                 ArrayList<Color> sColours = getStepsToSolveBoard(solution);
 
                 System.out.println("Steps to solve board\n");
+                int count = 0;
                 for (Color c : sColours) {
-                    System.out.println(printColour(c.toString()));
+                    System.out.println(count + " : " + printColour(c.toString()));
+                    count++;
                 }
             }
 
