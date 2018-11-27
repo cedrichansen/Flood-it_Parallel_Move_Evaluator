@@ -135,7 +135,7 @@ public class Board extends RecursiveAction implements Comparable {
 
         ArrayList<Board> childBoards = new ArrayList<>();
 
-        if (parent.numStepsTaken > 3 && parent.numStepsTaken <12) {
+        if (parent.numStepsTaken > 3 && parent.numStepsTaken <14) {
 
             for (int i=0; i<6; i++) {
                 if (3 < getNumAdditionalEncapsulatedSpaces(i, copies[i])) {
