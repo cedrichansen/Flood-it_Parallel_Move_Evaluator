@@ -63,7 +63,9 @@ public class Board extends RecursiveAction implements Comparable {
                 }
 
                 //remove last parent because it's technically not a step
-                steps.remove(temp);
+                steps.remove(steps.size()-1);
+                steps.remove(steps.size()-1);
+
 
 
                 Collections.reverse(steps);
