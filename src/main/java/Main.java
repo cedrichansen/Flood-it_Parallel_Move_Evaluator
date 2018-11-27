@@ -207,7 +207,7 @@ public class Main extends Application {
 
         root.getChildren().addAll(vbox);
 
-        Scene scene = new Scene(root, 485, 675);
+        Scene scene = new Scene(root, 485, 700);
 
         primaryStage.setTitle("Flood It - Solver");
         primaryStage.setScene(scene);
