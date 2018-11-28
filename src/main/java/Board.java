@@ -8,19 +8,19 @@ public class Board extends RecursiveAction implements Comparable {
 
     //no need to keep track of which state the current colour of encapsulated section, because it will always be the
     //colour of spaces[0][0]
-    private         Space[][]           spaces;
-    private         int                 numStepsTaken;
-    private         int                 numColours;
-    private         ArrayList<Space>    encapsulatedSpaces;
-    private         int                 numEncapsulatedSpaces;
-    private         boolean             doneFlooding                = false;
+    private Space[][] spaces;
+    private int numStepsTaken;
+    private int numColours;
+    private ArrayList<Space> encapsulatedSpaces;
+    private int numEncapsulatedSpaces;
+    private boolean doneFlooding = false;
 
-    private         Board               parent;
-            static  Board               solution;
+    private Board parent;
+    static Board solution;
 
-    static          int                 numAttempts                 = 0;
+    static int numAttempts = 0;
 
-    static          ArrayList<String>   cToWin                      = new ArrayList<>();
+    static ArrayList<String> cToWin = new ArrayList<>();
 
 
     //generateInitial board
@@ -50,9 +50,9 @@ public class Board extends RecursiveAction implements Comparable {
     }
 
     public ArrayList<Color> getStepsToSolveBoard(Board sol) {
-        for (;;) {
+        for (; ; ) {
             if (solution != null) {
-                ArrayList <Color> steps = new ArrayList<>();
+                ArrayList<Color> steps = new ArrayList<>();
 
                 Board temp = solution;
                 steps.add(getColour(temp.getSpaces()[0][0].getColour()));
@@ -63,13 +63,12 @@ public class Board extends RecursiveAction implements Comparable {
                 }
 
                 //remove last parent because it's technically not a step
-                steps.remove(steps.size()-1);
-                steps.remove(steps.size()-1);
-
+                steps.remove(steps.size() - 1);
+                steps.remove(steps.size() - 1);
 
 
                 Collections.reverse(steps);
-                return steps ;
+                return steps;
 
             }
         }
@@ -80,8 +79,11 @@ public class Board extends RecursiveAction implements Comparable {
 
         if (!doneFlooding && solution == null) {
 
-            System.out.println("splitting task");
-            List<Board> subtasks = new ArrayList<Board>(getNextBoards());
+            System.out.println("Analyzing board - steps: " + numStepsTaken + " Number of boards generated: " +
+                    increaseNumPathsAttempted() + " % completion: " + ((double) numEncapsulatedSpaces) / 100);
+
+
+            List<Board> subtasks = new ArrayList<>(getNextBoards());
 
             for (Board b : subtasks) {
                 //18 steps is criterion for winning the game
@@ -89,17 +91,19 @@ public class Board extends RecursiveAction implements Comparable {
                     b.fork();
                 } else {
                     //System.out.println("path terminated --- did not find solution quickly enough");
-                    System.out.println("Failed Boards: " + increaseNumPathsAttempted());
+                    //System.out.println("Failed Boards: " + increaseNumPathsAttempted());
                 }
             }
 
 
         } else {
             if (solution == null) {
+
+                System.out.println("Analyzing board - steps: " + numStepsTaken + " Number of boards generated: " +
+                        increaseNumPathsAttempted() + " % completion: " + ((double) numEncapsulatedSpaces) / 100);
+
                 System.out.println("Solution has been found!");
                 solution = this;
-                solution.printBoard();
-
                 ArrayList<Color> sColours = getStepsToSolveBoard(solution);
 
                 System.out.println("Steps to solve board\n");
@@ -115,35 +119,68 @@ public class Board extends RecursiveAction implements Comparable {
     }
 
 
-
-    public ArrayList<Board> getNextBoards(){
+    public ArrayList<Board> getNextBoards() {
 
         //save parent board
         final Board parent = this;
+        int parentNumEncapsulated = parent.getNumEncapsulatedSpaces();
 
         //create copies of the parent to be changed -- each of these correspond to a certain colour change
-        Board a =new Board(parent);
-        Board b =new Board(parent);
-        Board c =new Board(parent);
-        Board d =new Board(parent);
-        Board e =new Board(parent);
-        Board f =new Board(parent);
+        Board redChild = new Board(parent);
+        Board blueChild = new Board(parent);
+        Board yellowChild = new Board(parent);
+        Board greenChild = new Board(parent);
+        Board purpleChild = new Board(parent);
+        Board orangeChild = new Board(parent);
 
-        Board [] copies = {a,b,c,d,e,f};
+        Board[] copies = {redChild, blueChild, yellowChild, greenChild, purpleChild, orangeChild};
+
+        for (int i = 0; i < copies.length; i++) {
+            copies[i].changeColour(i);
+        }
 
         ArrayList<Board> childBoards = new ArrayList<>();
 
-        if (parent.numStepsTaken >= 3 && parent.numStepsTaken <=13) {
+        if (parent.numStepsTaken >= 2 && parent.numStepsTaken <= 13) {
 
-            for (int i=0; i<6; i++) {
-                if (3 < getNumAdditionalEncapsulatedSpaces(i, copies[i])) {
+            //look to add boards which add at least 3 new encapsulated squares...
+            for (int i = 0; i < 6; i++) {
+                if (3 < copies[i].getNumEncapsulatedSpaces() - parentNumEncapsulated) {
                     childBoards.add(copies[i]);
+                }
+            }
+
+
+            //if no board has at least 3 new encapsulated squares, then add ones with at least 2 new encapsulated squares
+            if (childBoards.size() == 0) {
+                for (int i = 0; i < 6; i++) {
+                    if (2 < copies[i].getNumEncapsulatedSpaces() - parentNumEncapsulated) {
+                        childBoards.add(copies[i]);
+                    }
+                }
+            }
+
+            //if no board has at least 2 new encapsulated squares, then add ones with at least 1 new encapsulated squares
+            if (childBoards.size() == 0) {
+                for (int i = 0; i < 6; i++) {
+                    if (1 < copies[i].getNumEncapsulatedSpaces() - parentNumEncapsulated) {
+                        childBoards.add(copies[i]);
+                    }
+                }
+            }
+
+            //if still no good board has been added, just add whatever actually add encapsulated squares
+            if (childBoards.size() == 0) {
+                for (int i = 0; i < 6; i++) {
+                    if (0 < copies[i].getNumEncapsulatedSpaces() - parentNumEncapsulated) {
+                        childBoards.add(copies[i]);
+                    }
                 }
             }
 
         } else {
             for (int i = 0; i < 6; i++) {
-                if (0 < getNumAdditionalEncapsulatedSpaces(i, copies[i])) {
+                if (0 < copies[i].getNumEncapsulatedSpaces() - parentNumEncapsulated) {
 
                     childBoards.add(copies[i]);
                 }
@@ -156,12 +193,12 @@ public class Board extends RecursiveAction implements Comparable {
     }
 
 
-    public Space [][] cloneSpaces (Board b) {
-        int l= b.spaces.length;
+    public Space[][] cloneSpaces(Board b) {
+        int l = b.spaces.length;
         int w = b.spaces[0].length;
-        Space [][] newSpaces = new Space[l][w];
-        for (int i =0; i<l; i++) {
-            for (int j = 0; j<w;j++) {
+        Space[][] newSpaces = new Space[l][w];
+        for (int i = 0; i < l; i++) {
+            for (int j = 0; j < w; j++) {
                 Space old = b.spaces[i][j];
                 Space temp = new Space(old.getColour(), old.isEncapsulated(), old.getI(), old.getJ());
                 newSpaces[i][j] = temp;
@@ -172,14 +209,14 @@ public class Board extends RecursiveAction implements Comparable {
     }
 
 
-    public int getNumAdditionalEncapsulatedSpaces(int colour, Board child) {
-
-        int beforeChange = child.getEncapsulatedSpaces().size();
-        child.changeColour(colour);
-        int afterChange = child.getEncapsulatedSpaces().size();
-
-        return afterChange-beforeChange;
-    }
+//    public int getNumAdditionalEncapsulatedSpaces(int colour, Board child) {
+//
+//        int beforeChange = child.getEncapsulatedSpaces().size();
+//        child.changeColour(colour);
+//        int afterChange = child.getEncapsulatedSpaces().size();
+//
+//        return afterChange-beforeChange;
+//    }
 
 
     public void changeColour(int newColour) {
@@ -226,7 +263,7 @@ public class Board extends RecursiveAction implements Comparable {
 
 
     public static javafx.scene.paint.Color getColour(int i) {
-        if (i == 0){
+        if (i == 0) {
             return Color.RED;
 
         } else if (i == 1) {
@@ -250,36 +287,35 @@ public class Board extends RecursiveAction implements Comparable {
     }
 
 
-
     public void assignNewEncapsulating(Board b) {
         encapsulatedSpaces = getEncapsulatedSpaces();
 
         for (Space s : encapsulatedSpaces) {
-           addSameColourNeighbours(s.getI(), s.getJ(), b);
+            addSameColourNeighbours(s.getI(), s.getJ(), b);
         }
     }
 
 
     public void addSameColourNeighbours(int i, int j, Board b) {
         Space current = b.spaces[i][j];
-        if (isValidSpace(i-1, j, b)) {
-            if (b.spaces[i-1][j].getColour() == current.getColour()) {
-                b.spaces[i-1][j].setEncapsulated(true);
+        if (isValidSpace(i - 1, j, b)) {
+            if (b.spaces[i - 1][j].getColour() == current.getColour()) {
+                b.spaces[i - 1][j].setEncapsulated(true);
             }
         }
-        if (isValidSpace(i+1, j, b)) {
-            if (b.spaces[i+1][j].getColour() == current.getColour()) {
-                b.spaces[i+1][j].setEncapsulated(true);
+        if (isValidSpace(i + 1, j, b)) {
+            if (b.spaces[i + 1][j].getColour() == current.getColour()) {
+                b.spaces[i + 1][j].setEncapsulated(true);
             }
         }
-        if (isValidSpace(i, j-1, b)) {
-            if (b.spaces[i][j-1].getColour() == current.getColour()) {
-                b.spaces[i][j-1].setEncapsulated(true);
+        if (isValidSpace(i, j - 1, b)) {
+            if (b.spaces[i][j - 1].getColour() == current.getColour()) {
+                b.spaces[i][j - 1].setEncapsulated(true);
             }
         }
-        if (isValidSpace(i, j+1, b)) {
-            if (b.spaces[i][j+1].getColour() == current.getColour()) {
-                b.spaces[i][j+1].setEncapsulated(true);
+        if (isValidSpace(i, j + 1, b)) {
+            if (b.spaces[i][j + 1].getColour() == current.getColour()) {
+                b.spaces[i][j + 1].setEncapsulated(true);
             }
         }
     }
@@ -287,12 +323,12 @@ public class Board extends RecursiveAction implements Comparable {
 
     public static boolean isValidSpace(int i, int j, Board b) {
 
-        return ((i>=0 && i<b.spaces.length) && (j>=0 && j<b.spaces[0].length));
+        return ((i >= 0 && i < b.spaces.length) && (j >= 0 && j < b.spaces[0].length));
 
 
     }
 
-    public void changeEncapsulatedColour(int newColour){
+    public void changeEncapsulatedColour(int newColour) {
         ArrayList<Space> spaces = getEncapsulatedSpaces();
         for (Space s : spaces) {
             s.setColour(newColour);
@@ -301,12 +337,12 @@ public class Board extends RecursiveAction implements Comparable {
     }
 
     //helper for changeEncapsulateColour
-    public ArrayList<Space> getEncapsulatedSpaces(){
+    public ArrayList<Space> getEncapsulatedSpaces() {
         ArrayList<Space> encapsulatedSpaces = new ArrayList<Space>();
 
 
-        for (int i=0; i<spaces.length; i++) {
-            for (int j = 0; j<spaces[0].length; j++) {
+        for (int i = 0; i < spaces.length; i++) {
+            for (int j = 0; j < spaces[0].length; j++) {
 
                 if (spaces[i][j].isEncapsulated()) {
                     encapsulatedSpaces.add(spaces[i][j]);
@@ -317,13 +353,11 @@ public class Board extends RecursiveAction implements Comparable {
         numEncapsulatedSpaces = encapsulatedSpaces.size();
 
 
-        if (encapsulatedSpaces.size()== spaces.length * spaces[0].length) {
+        if (encapsulatedSpaces.size() == spaces.length * spaces[0].length) {
             doneFlooding = true;
         }
         return encapsulatedSpaces;
     }
-
-
 
 
     public static Board generateRandomBoard(int row, int col, int numColours) {
@@ -355,10 +389,6 @@ public class Board extends RecursiveAction implements Comparable {
             System.out.println(row);
         }
     }
-
-
-
-
 
 
     public Space[][] getSpaces() {
@@ -398,6 +428,6 @@ public class Board extends RecursiveAction implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        return ((Board)o).getNumEncapsulatedSpaces() - this.getNumEncapsulatedSpaces();
+        return ((Board) o).getNumEncapsulatedSpaces() - this.getNumEncapsulatedSpaces();
     }
 }

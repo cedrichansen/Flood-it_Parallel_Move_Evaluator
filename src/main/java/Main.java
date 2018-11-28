@@ -207,7 +207,7 @@ public class Main extends Application {
 
         root.getChildren().addAll(vbox);
 
-        Scene scene = new Scene(root, 485, 700);
+        Scene scene = new Scene(root, 485, 725);
 
         primaryStage.setTitle("Flood It - Solver");
         primaryStage.setScene(scene);
@@ -252,9 +252,15 @@ public class Main extends Application {
             }
         });
 
-        numMovesLabel.setText("Number of moves: " + numMoves);
+        numMovesLabel.setText("Number of moves: " + numMoves + "/17");
         Label finishedLabel = new Label();
-        finishedLabel.setText("Game is done!");
+        if (numMoves <17) {
+            finishedLabel.setText("You win!");
+        } else {
+            finishedLabel.setText("You lose!");
+        }
+
+
 
         grid.setCellHeight(45);
         grid.setCellWidth(45);
