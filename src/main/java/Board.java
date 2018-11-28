@@ -49,7 +49,7 @@ public class Board extends RecursiveAction implements Comparable {
         return numAttempts;
     }
 
-    public ArrayList<Color> getStepsToSolveBoard(Board sol) {
+    public ArrayList<Color> getStepsToSolveBoard() {
         for (; ; ) {
             if (solution != null) {
                 ArrayList<Color> steps = new ArrayList<>();
@@ -79,34 +79,36 @@ public class Board extends RecursiveAction implements Comparable {
 
         if (!doneFlooding && solution == null) {
 
-            System.out.println("Analyzing board - steps: " + numStepsTaken + " Number of boards generated: " +
-                    increaseNumPathsAttempted() + " % completion: " + ((double) numEncapsulatedSpaces) / 100);
+            System.out.println("Analyzing board - steps: " + numStepsTaken + "      Number of boards generated: " +
+                    increaseNumPathsAttempted() + "     completion %:  " + ((double) numEncapsulatedSpaces) / 100);
 
 
             List<Board> subtasks = new ArrayList<>(getNextBoards());
 
             for (Board b : subtasks) {
                 //18 steps is criterion for winning the game
-                if (b.getNumStepsTaken() <= 17) {
+                if (b.getNumStepsTaken() <= 17 ) {
                     b.fork();
-                } else {
-                    //System.out.println("path terminated --- did not find solution quickly enough");
-                    //System.out.println("Failed Boards: " + increaseNumPathsAttempted());
                 }
+
+//                else {
+//                    //System.out.println("path terminated --- did not find solution quickly enough");
+//                    //System.out.println("Failed Boards: " + increaseNumPathsAttempted());
+//                }
             }
 
 
         } else {
             if (solution == null) {
 
-                System.out.println("Analyzing board - steps: " + numStepsTaken + " Number of boards generated: " +
-                        increaseNumPathsAttempted() + " % completion: " + ((double) numEncapsulatedSpaces) / 100);
+                System.out.println("Analyzing board - steps: " + numStepsTaken + "      Number of boards generated: " +
+                        increaseNumPathsAttempted() + "     completion %:  " + ((double) numEncapsulatedSpaces) / 100);
 
                 System.out.println("Solution has been found!");
                 solution = this;
-                ArrayList<Color> sColours = getStepsToSolveBoard(solution);
+                ArrayList<Color> sColours = solution.getStepsToSolveBoard();
 
-                System.out.println("Steps to solve board\n");
+                System.out.println("\n\n\nSteps to solve board\n");
                 int count = 1;
                 for (Color c : sColours) {
                     System.out.println(count + " : " + printColour(c.toString()));
@@ -139,41 +141,41 @@ public class Board extends RecursiveAction implements Comparable {
             copies[i].changeColour(i);
         }
 
-        ArrayList<Board> childBoards = new ArrayList<>();
+        ArrayList<Board> goodChildBoards = new ArrayList<>();
 
-        if (parent.numStepsTaken >= 2 && parent.numStepsTaken <= 13) {
+        if (parent.numStepsTaken >= 2 && parent.numStepsTaken <= 14) {
 
             //look to add boards which add at least 3 new encapsulated squares...
             for (int i = 0; i < 6; i++) {
                 if (3 < copies[i].getNumEncapsulatedSpaces() - parentNumEncapsulated) {
-                    childBoards.add(copies[i]);
+                    goodChildBoards.add(copies[i]);
                 }
             }
 
 
             //if no board has at least 3 new encapsulated squares, then add ones with at least 2 new encapsulated squares
-            if (childBoards.size() == 0) {
+            if (goodChildBoards.size() == 0) {
                 for (int i = 0; i < 6; i++) {
                     if (2 < copies[i].getNumEncapsulatedSpaces() - parentNumEncapsulated) {
-                        childBoards.add(copies[i]);
+                        goodChildBoards.add(copies[i]);
                     }
                 }
             }
 
             //if no board has at least 2 new encapsulated squares, then add ones with at least 1 new encapsulated squares
-            if (childBoards.size() == 0) {
+            if (goodChildBoards.size() == 0) {
                 for (int i = 0; i < 6; i++) {
                     if (1 < copies[i].getNumEncapsulatedSpaces() - parentNumEncapsulated) {
-                        childBoards.add(copies[i]);
+                        goodChildBoards.add(copies[i]);
                     }
                 }
             }
 
             //if still no good board has been added, just add whatever actually add encapsulated squares
-            if (childBoards.size() == 0) {
+            if (goodChildBoards.size() == 0) {
                 for (int i = 0; i < 6; i++) {
                     if (0 < copies[i].getNumEncapsulatedSpaces() - parentNumEncapsulated) {
-                        childBoards.add(copies[i]);
+                        goodChildBoards.add(copies[i]);
                     }
                 }
             }
@@ -182,14 +184,14 @@ public class Board extends RecursiveAction implements Comparable {
             for (int i = 0; i < 6; i++) {
                 if (0 < copies[i].getNumEncapsulatedSpaces() - parentNumEncapsulated) {
 
-                    childBoards.add(copies[i]);
+                    goodChildBoards.add(copies[i]);
                 }
             }
         }
 
 
-        Collections.sort(childBoards);
-        return childBoards;
+        Collections.sort(goodChildBoards);
+        return goodChildBoards;
     }
 
 
