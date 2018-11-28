@@ -143,7 +143,7 @@ public class Board extends RecursiveAction implements Comparable {
 
         ArrayList<Board> goodChildBoards = new ArrayList<>();
 
-        if (parent.numStepsTaken >= 2 && parent.numStepsTaken <= 14) {
+        if (parent.numStepsTaken >= 2 && parent.numStepsTaken <= 15) {
 
             //look to add boards which add at least 3 new encapsulated squares...
             for (int i = 0; i < 6; i++) {
