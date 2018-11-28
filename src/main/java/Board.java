@@ -87,7 +87,7 @@ public class Board extends RecursiveAction implements Comparable {
 
             for (Board b : subtasks) {
                 //18 steps is criterion for winning the game
-                if (b.getNumStepsTaken() <= 17 ) {
+                if (b.getNumStepsTaken() <= 18 ) {
                     b.fork();
                 }
 

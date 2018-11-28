@@ -254,7 +254,7 @@ public class Main extends Application {
 
         numMovesLabel.setText("Number of moves: " + numMoves + "/17");
         Label finishedLabel = new Label();
-        if (numMoves <17) {
+        if (numMoves <=17) {
             finishedLabel.setText("You win!");
         } else {
             finishedLabel.setText("You lose!");
