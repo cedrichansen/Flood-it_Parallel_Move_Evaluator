@@ -45,7 +45,7 @@ public class Main extends Application {
     private static Button                   orangeButton;
     private static Label                    numMovesLabel;
     private static VBox                     vbox;
-            static ArrayList<String>        steps           = Board.cToWin;
+
 
 
     public static void main(String[] args) {

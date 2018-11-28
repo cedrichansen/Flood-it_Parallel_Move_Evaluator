@@ -6,19 +6,29 @@ import java.util.concurrent.RecursiveAction;
 public class Board extends RecursiveAction implements Comparable {
 
 
+
     //no need to keep track of which state the current colour of encapsulated section, because it will always be the
     //colour of spaces[0][0]
-    private Space[][] spaces;
-    private int numStepsTaken;
-    private int numColours;
-    private ArrayList<Space> encapsulatedSpaces;
-    private int numEncapsulatedSpaces;
-    private boolean doneFlooding = false;
+    private                 Space[][]           spaces;
+    private                 int                 numStepsTaken;
+    private                 int                 numColours;
+    private                 ArrayList<Space>    encapsulatedSpaces;
+    private                 int                 numEncapsulatedSpaces;
+    private                 boolean             doneFlooding                = false;
 
-    private Board parent;
-    static Board solution;
+    private                 Board               parent;
+            static volatile Board               solution;
 
-    static int numAttempts = 0;
+            static          int                 numAttempts = 0;
+
+
+    /*
+    *   The maximum number of moves the solver is allowed to look at. The maximum amount of moves for a 10x10 configuration
+    *   is 17 moves. The variable needs to be set to 18 in this case, because the first child board that gets spawned in the
+    *   Main method, starts at 1 (because it is a clone of the board that is being displayed on the GUI), thus 18 is selected
+    *
+    */
+    private static final int MAX_NUM_MOVES = 18;
 
     static ArrayList<String> cToWin = new ArrayList<>();
 
@@ -87,7 +97,7 @@ public class Board extends RecursiveAction implements Comparable {
 
             for (Board b : subtasks) {
                 //18 steps is criterion for winning the game
-                if (b.getNumStepsTaken() <= 18 ) {
+                if (b.getNumStepsTaken() <= MAX_NUM_MOVES ) {
                     b.fork();
                 }
 
