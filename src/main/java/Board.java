@@ -87,7 +87,7 @@ public class Board extends RecursiveAction implements Comparable {
 
             for (Board b : subtasks) {
                 //18 steps is criterion for winning the game
-                if (b.getNumStepsTaken() <= 17 ) {
+                if (b.getNumStepsTaken() <= 18 ) {
                     b.fork();
                 }
 
@@ -143,7 +143,7 @@ public class Board extends RecursiveAction implements Comparable {
 
         ArrayList<Board> goodChildBoards = new ArrayList<>();
 
-        if (parent.numStepsTaken >= 2 && parent.numStepsTaken <= 15) {
+        if (parent.numStepsTaken >= 2 && parent.numStepsTaken <= 16) {
 
             //look to add boards which add at least 3 new encapsulated squares...
             for (int i = 0; i < 6; i++) {
