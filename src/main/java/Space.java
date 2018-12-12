@@ -12,7 +12,6 @@ public class Space {
         this.isEncapsulated = isEncapsulated;
         i = x;
         j = y;
-
     }
 
     public String toString() {

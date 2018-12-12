@@ -13,13 +13,13 @@ public class Board extends RecursiveAction implements Comparable {
     private                 int                 numStepsTaken;
     private                 int                 numColours;
     private                 ArrayList<Space>    encapsulatedSpaces;
-    private                 int                 numEncapsulatedSpaces;
+    private                 int                 numEncapsulatedSpaces = 1;
     private                 boolean             doneFlooding                = false;
 
     private                 Board               parent;
             static volatile Board               solution;
 
-            static          int                 numAttempts = 0;
+            static          int                 numAttempts = 1;
 
 
     /*
@@ -60,7 +60,7 @@ public class Board extends RecursiveAction implements Comparable {
     }
 
     public ArrayList<Color> getStepsToSolveBoard() {
-        for (; ; ) {
+        for (;;) {
             if (solution != null) {
                 ArrayList<Color> steps = new ArrayList<>();
 
@@ -101,10 +101,6 @@ public class Board extends RecursiveAction implements Comparable {
                     b.fork();
                 }
 
-//                else {
-//                    //System.out.println("path terminated --- did not find solution quickly enough");
-//                    //System.out.println("Failed Boards: " + increaseNumPathsAttempted());
-//                }
             }
 
 
@@ -220,15 +216,6 @@ public class Board extends RecursiveAction implements Comparable {
         return newSpaces;
     }
 
-
-//    public int getNumAdditionalEncapsulatedSpaces(int colour, Board child) {
-//
-//        int beforeChange = child.getEncapsulatedSpaces().size();
-//        child.changeColour(colour);
-//        int afterChange = child.getEncapsulatedSpaces().size();
-//
-//        return afterChange-beforeChange;
-//    }
 
 
     public void changeColour(int newColour) {
