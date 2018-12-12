@@ -1,3 +1,4 @@
 .idea/
 csc375hw03.iml
 target/*
+.DS_Store
